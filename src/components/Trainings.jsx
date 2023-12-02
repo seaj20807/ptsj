@@ -25,7 +25,7 @@ export default function Trainings() {
     }
 
     const getDateTime = (params) => {
-        return (dayjs(params.data.date).format("DD.MM.YYYY, HH:MM"))
+        return (dayjs(params.data.date).format("DD.MM.YYYY, HH:mm"))
     }
 
     const deleteTraining = (trainingToDelete) => {

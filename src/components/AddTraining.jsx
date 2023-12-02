@@ -46,6 +46,7 @@ export default function AddTraining(props) {
     }
 
     const handleDateChange = (newDate) => {
+        console.log(newDate)
         setTraining({ ...training, date: newDate })
     }
 

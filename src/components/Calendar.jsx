@@ -31,8 +31,8 @@ export default function Calendar() {
         return (
             <>
                 <b>{
-                    dayjs(eventInfo.event.start).format('HH:MM') + ' - ' +
-                    dayjs(eventInfo.event.end).format('HH:MM')
+                    dayjs(eventInfo.event.start).format('HH:mm') + ' - ' +
+                    dayjs(eventInfo.event.end).format('HH:mm')
                 }</b><br />
                 <i>{
                     eventInfo.event._def.extendedProps.activity + ' / ' +
