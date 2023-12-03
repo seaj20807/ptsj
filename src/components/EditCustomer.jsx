@@ -8,24 +8,29 @@ import TextField from '@mui/material/TextField'
 
 export default function AddCustomer(props) {
 
+    // Define the state variables.
     const [open, setOpen] = React.useState(false);
     const [customer, setCustomer] = React.useState({
         firstname: '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: ''
     })
 
+    // Open the Dialog for editing an existing customer's data.
     const handleClickOpen = () => {
         setCustomer(props.customerToEdit)
         setOpen(true);
     };
 
+    // Close the Dialog for editing an existing customer's data.
     const handleClose = () => {
         setOpen(false);
     };
 
+    // Read the data from the input fields (TextField) and set them to the customer variable.
     const handleInputChange = (event) => {
         setCustomer({ ...customer, [event.target.name]: event.target.value })
     }
 
+    // Save the new data for an existing customer.
     const saveCustomer = () => {
         console.log(props.customerToEdit)
         props.saveCustomer(customer, props.customerToEdit.links[0].href)

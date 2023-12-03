@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -7,11 +7,13 @@ import dayjs from 'dayjs'
 
 export default function Calendar() {
 
+    // Define the state variables and fetch URL for data to be shown.
     const [trainingsList, setTrainingsList] = useState([])
     const REST_URL = 'https://traineeapp.azurewebsites.net/gettrainings'
 
     useEffect(() => getTrainingsList(), [])
 
+    // Fetch the training data to be shown in FullCalendar.
     const getTrainingsList = () => {
         fetch(REST_URL)
             .then(response => response.json())
@@ -21,12 +23,14 @@ export default function Calendar() {
             .catch(error => console.error(error))
     }
 
+    // Add an ending date and time for a training to the training data.
     const updateList = () => {
         for (let i = 0; i < trainingsList.length; i++) {
             trainingsList[i].end = dayjs(trainingsList[i].date).add(trainingsList[i].duration, 'minutes').toDate().toISOString()
         }
     }
 
+    // Define how the events are shown in FullCalendar.
     const renderEventContent = (eventInfo) => {
         return (
             <>
@@ -45,6 +49,7 @@ export default function Calendar() {
 
     return (
         <>
+            {/* Perform the update to the training data list. TODO: Find a better place to call the function? */}
             {updateList()}
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}

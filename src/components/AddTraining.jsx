@@ -12,6 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 export default function AddTraining(props) {
 
+    // Define the state variables.
     const [open, setOpen] = React.useState(false);
     const [training, setTraining] = React.useState({
         date: '', duration: '', activity: '', customer: ''
@@ -20,6 +21,7 @@ export default function AddTraining(props) {
         firstname: '', lastname: ''
     })
 
+    // Open the Dialog for adding a new training's data for a selected customer.
     const handleClickOpen = () => {
         if (props.gridRef.current.getSelectedNodes().length > 0) {
             setCustomer({
@@ -29,6 +31,7 @@ export default function AddTraining(props) {
             })
             setTraining({
                 ...training,
+                // Provide the customer link to the training variable as required by the REST API call.
                 customer: props.gridRef.current.getSelectedNodes()[0].data.links[0].href
             })
             setOpen(true)
@@ -37,19 +40,22 @@ export default function AddTraining(props) {
         }
     };
 
+    // Close the Dialog for adding a new training's data.
     const handleClose = () => {
         setOpen(false);
     };
 
+    // Read the data from the input fields (TextField) and set them to the training variable.
     const handleInputChange = (event) => {
         setTraining({ ...training, [event.target.name]: event.target.value })
     }
 
+    // Read the date (and time) from the input field (DateTimeField) and set it to the training variable.
     const handleDateChange = (newDate) => {
-        console.log(newDate)
         setTraining({ ...training, date: newDate })
     }
 
+    // Add a new training to the database.
     const addTraining = () => {
         props.addTraining(training)
         handleClose()

@@ -10,6 +10,7 @@ import DeleteCustomer from './DeleteCustomer'
 
 export default function Customers() {
 
+    // Define the state variables and fetch URL for data to be shown.
     const [customersList, setCustomersList] = useState([])
     const [msg, setMsg] = useState('')
     const [open, setOpen] = useState(false)
@@ -18,6 +19,7 @@ export default function Customers() {
 
     useEffect(() => getCustomersList(), [])
 
+    // Fetch the customer data to be shown in AG Grid.
     const getCustomersList = () => {
         fetch(REST_URL)
             .then(response => response.json())
@@ -27,6 +29,7 @@ export default function Customers() {
             .catch(error => console.error(error))
     }
 
+    // Function for adding a customer and showing a Snackbar message on success or failure.
     const addCustomer = (newCustomer) => {
         fetch(REST_URL, {
             method: 'POST',
@@ -35,10 +38,20 @@ export default function Customers() {
             },
             body: JSON.stringify(newCustomer)
         })
-            .then(response => getCustomersList())
+            .then(response => {
+                if (response.ok) {
+                    setMsg('Customer was added successfully!')
+                    setOpen(true)
+                    getCustomersList()
+                } else {
+                    setMsg('Customer could not be added!')
+                    setOpen(true)
+                }
+            })
             .catch(error => console.error(error))
     }
 
+    // Function for editing a customer and showing a Snackbar message on success or failure.
     const editCustomer = (editedCustomer, customerToEdit) => {
         fetch(customerToEdit, {
             method: 'PUT',
@@ -47,10 +60,20 @@ export default function Customers() {
             },
             body: JSON.stringify(editedCustomer)
         })
-            .then(response => getCustomersList())
+            .then(response => {
+                if (response.ok) {
+                    setMsg('Customer was edited successfully!')
+                    setOpen(true)
+                    getCustomersList()
+                } else {
+                    setMsg('Customer could not be edited!')
+                    setOpen(true)
+                }
+            })
             .catch(error => console.error(error))
     }
 
+    // Function for deleting a customer and showing a Snackbar message on success or failure.
     const deleteCustomer = (customerToDelete) => {
         fetch(customerToDelete.links[0].href, {
             method: 'DELETE'
@@ -61,12 +84,14 @@ export default function Customers() {
                     setOpen(true)
                     getCustomersList()
                 } else {
-                    alert('Something went wrong')
+                    setMsg('Customer could not be deleted!')
+                    setOpen(true)
                 }
             })
             .catch(error => console.error(error))
     }
 
+    // Function for adding a training to a customer and showing a Snackbar message on success or failure.
     const addTraining = (newTraining) => {
         fetch('https://traineeapp.azurewebsites.net/api/trainings', {
             method: 'POST',
@@ -81,16 +106,35 @@ export default function Customers() {
                     setOpen(true)
                     getCustomersList()
                 } else {
-                    alert('Something went wrong')
+                    setMsg('Training could not be added!')
+                    setOpen(true)
                 }
             })
             .catch(error => console.error(error))
     }
 
+    // Define which columns to export in case of a CSV export.    
+    const getParams = () => {
+        return {
+            columnKeys: [
+                'firstname',
+                'lastname',
+                'streetaddress',
+                'postcode',
+                'city',
+                'email',
+                'phone'
+            ]
+        }
+    }
+
+    // Export customer data as CSV.
     const exportCustomers = useCallback(() => {
-        gridRef.current.exportDataAsCsv()
+        let params = getParams()
+        gridRef.current.exportDataAsCsv(params)
     }, [])
 
+    // Define the AG Grid view columns and their data + Edit and Delete buttons (and their functions).
     const columns = [
         {
             field: 'firstname',

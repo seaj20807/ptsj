@@ -8,23 +8,28 @@ import TextField from '@mui/material/TextField'
 
 export default function AddCustomer(props) {
 
+    // Define the state variables.
     const [open, setOpen] = React.useState(false);
     const [customer, setCustomer] = React.useState({
         firstname: '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: ''
     })
 
+    // Open the Dialog for adding a new customer's data.
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    // Close the Dialog for adding a new customer's data.
     const handleClose = () => {
         setOpen(false);
     };
 
+    // Read the data from the input fields (TextField) and set them to the customer variable.
     const handleInputChange = (event) => {
         setCustomer({ ...customer, [event.target.name]: event.target.value })
     }
 
+    // Add a new customer to the database.
     const addCustomer = () => {
         props.addCustomer(customer)
         handleClose()

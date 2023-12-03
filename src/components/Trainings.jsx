@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { Snackbar } from '@mui/material'
 import 'ag-grid-community/styles/ag-grid.css'
@@ -8,13 +8,16 @@ import DeleteTraining from './DeleteTraining'
 
 export default function Trainings() {
 
+    // Define the state variables and fetch URL for data to be shown.
     const [trainingsList, setTrainingsList] = useState([])
     const [msg, setMsg] = useState('')
     const [open, setOpen] = useState(false)
     const REST_URL = 'https://traineeapp.azurewebsites.net/gettrainings'
 
+    // Perform the fetch on the first render.
     useEffect(() => getTrainingsList(), [])
 
+    // Fetch the training data to be shown in AG Grid.
     const getTrainingsList = () => {
         fetch(REST_URL)
             .then(response => response.json())
@@ -24,10 +27,12 @@ export default function Trainings() {
             .catch(error => console.error(error))
     }
 
+    // Get the date (and time) data from the 'Date and Time' field and return it in the desired format.
     const getDateTime = (params) => {
         return (dayjs(params.data.date).format("DD.MM.YYYY, HH:mm"))
     }
 
+    // Delete the training from the database.
     const deleteTraining = (trainingToDelete) => {
         fetch('https://traineeapp.azurewebsites.net/api/trainings/' + trainingToDelete.id, {
             method: 'DELETE'
@@ -38,12 +43,14 @@ export default function Trainings() {
                     setOpen(true)
                     getTrainingsList()
                 } else {
-                    alert('Something went wrong')
+                    setMsg('Training could not be deleted!')
+                    setOpen(true)
                 }
             })
             .catch(error => console.error(error))
     }
 
+    // Define the AG Grid view columns and their data + Delete button (and its function).
     const columns = [
         {
             field: 'customer.firstname',
