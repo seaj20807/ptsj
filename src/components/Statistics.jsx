@@ -51,7 +51,7 @@ export default function Statistics() {
             TODO: Find a better place to call the function? */}
             {groupSumData()}
             <BarChart
-                width={600}
+                width={800}
                 height={500}
                 data={trainingsByActivity}
                 margin={{
