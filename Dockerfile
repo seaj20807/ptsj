@@ -1,11 +1,19 @@
-FROM alpine:3.17
+# Fetching the latest node image on alpine linux
+FROM node:alpine AS development
 
+# Declaring env
+ENV NODE_ENV development
+
+# Setting up the work directory
 WORKDIR /seaj20807/ptsj
 
-COPY public/ /seaj20807/ptsj/public
-COPY src/ /seaj20807/ptsj/src
-COPY package.json /seaj20807/ptsj
+# Installing dependencies
+COPY ./package*.json /seaj20807/ptsj
 
 RUN npm install
 
-CMD ["npm", "start"]
+# Copying all the files in our project
+COPY . .
+
+# Starting our application
+CMD ["npm","start]
